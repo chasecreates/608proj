@@ -55,8 +55,7 @@ def access():
 
 
     if request.method == 'POST':
-        studentID = request.form["studentID"]
-        dorm = request.form["dorm"]
+        return(str(request.form))
 
 
 
