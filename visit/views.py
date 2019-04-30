@@ -52,8 +52,8 @@ def guest_list_entry():
 
 @app.route('/access', methods=['GET', 'POST'])
 def access():
-    studentID = request.args.get("studentID")
-    dorm = request.args.get("dorm")
+    studentID = request.form["studentID"]
+    dorm = request.form["dorm"]
 
     requesting_student = fetch_user(studentID)
     if not requesting_student:
