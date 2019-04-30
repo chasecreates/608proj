@@ -52,22 +52,27 @@ def guest_list_entry():
 
 @app.route('/access', methods=['GET', 'POST'])
 def access():
-    studentID = request.form["studentID"]
-    dorm = request.form["dorm"]
-
-    requesting_student = fetch_user(studentID)
-    if not requesting_student:
-        return 'Not a valid student in the database'
-    requesting_student_id = requesting_student[0]
-    conns = []
-    get_conns_of_user(requesting_student_id, conns)
-    granted_access = False
-    for c in conns:
-        if fetch_user_by_id(c[1])[5] == dorm:
-            granted_access = True
 
 
-    return str(granted_access)
+    if request.method == 'POST':
+        studentID = request.form["studentID"]
+        dorm = request.form["dorm"]
+
+
+
+        requesting_student = fetch_user(studentID)
+        if not requesting_student:
+            return 'Not a valid student in the database'
+        requesting_student_id = requesting_student[0]
+        conns = []
+        get_conns_of_user(requesting_student_id, conns)
+        granted_access = False
+        for c in conns:
+            if fetch_user_by_id(c[1])[5] == dorm:
+                granted_access = True
+
+
+        return str(granted_access)
 
 
 
