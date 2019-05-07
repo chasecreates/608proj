@@ -23,7 +23,7 @@ To edit your information, click <a href="/edit-information">here.</a>
 <h1>Guest List</h1>
 
 {% for guest in guest_list %}
-<p>{{ guest }}</p>
+<p>{{ guest.values()[0] }} <a href="/delete/{{ guest.keys()[0] }}">Remove</a></p>
 {% endfor %}
 {% endif %}
 

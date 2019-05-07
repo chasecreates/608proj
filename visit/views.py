@@ -97,7 +97,7 @@ def access():
 
 
     if request.method == 'POST':
-        
+
         studentID = request.form.get('studentID')
         dorm = request.form.get('dorm')
 
@@ -117,6 +117,16 @@ def access():
 
         return str(granted_access)
 
+
+@app.route('/delete/<guest_id>', methods=['GET', 'POST'])
+def delete_guest(guest_id):
+    your_kerberos = session['kerberos']
+    user = fetch_user_by_kerb(your_kerberos)
+    your_id = user[0]
+
+    remove_a_guest(your_id, guest_id)
+
+    return redirect(url_for('dashboard'))
 
 
 

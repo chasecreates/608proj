@@ -95,13 +95,17 @@ def get_guests_of_user(kerberos, guest_list):
     for c in conns:
         id_of_guest = c[2]
         new_user = fetch_user_by_id(id_of_guest)
-        guest_list.append(str(new_user[1]) + " " + str(new_user[2]))
+        guest_list.append( {new_user[0]: str(new_user[1]) + " " + str(new_user[2])} )
     conn.commit()
     conn.close()
 
 
-
-
+def remove_a_guest(your_id, guest_id):
+    conn = sqlite3.connect(visitation_db)
+    c = conn.cursor()
+    c.execute('''DELETE FROM connections WHERE friend1 = ? AND friend2 = ?''', (your_id, guest_id))
+    conn.commit()
+    conn.close()
 
 
 
