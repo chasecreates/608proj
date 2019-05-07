@@ -62,6 +62,14 @@ def fetch_user(studentID):
     conn.commit()
     conn.close()
     return user
+
+def fetch_user_by_kerb(kerb):
+    conn = sqlite3.connect(visitation_db)
+    c = conn.cursor()
+    user = c.execute('''SELECT * FROM students WHERE kerberos = ?''', (kerb, )).fetchone()
+    conn.commit()
+    conn.close()
+    return user
 def fetch_user_by_id(id):
     conn = sqlite3.connect(visitation_db)
     c = conn.cursor()
@@ -78,6 +86,32 @@ def get_conns_of_user(id, conn_list):
     conn.commit()
     conn.close()
 
+def get_guests_of_user(kerberos, guest_list):
+    conn = sqlite3.connect(visitation_db)
+    c = conn.cursor()
+    user = c.execute('''SELECT * FROM students WHERE kerberos = ?''', (kerberos, )).fetchone()
+    id = user[0]
+    conns = c.execute('''SELECT * FROM connections WHERE friend1 = ?''', (id, )).fetchall()
+    for c in conns:
+        id_of_guest = c[2]
+        new_user = fetch_user_by_id(id_of_guest)
+        guest_list.append(str(new_user[1]) + " " + str(new_user[2]))
+    conn.commit()
+    conn.close()
+
+
+
+
+
+
+
+
+def update_dorm_info(kerb, dorm):
+    conn = sqlite3.connect(visitation_db)
+    c = conn.cursor()
+    conns = c.execute('''UPDATE students SET dorm = ? WHERE kerberos = ?; ''', (dorm, kerb))
+    conn.commit()
+    conn.close()
 
 
 
