@@ -92,6 +92,8 @@ def access():
 
     if request.method == 'POST':
         
+        studentID = request.form.get('studentID')
+        dorm = request.form.get('dorm')
 
 
 
