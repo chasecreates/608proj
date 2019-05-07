@@ -91,7 +91,7 @@ def access():
 
 
     if request.method == 'POST':
-        return(str(request.form))
+        
 
 
 
