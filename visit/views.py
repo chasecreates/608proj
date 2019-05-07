@@ -16,6 +16,12 @@ def signup():
         dorm = request.form['dorm']
 
         insert_into_database(firstname, lastname, kerberos, student_id, dorm)
+
+        # Putting yourself on your guest list
+        host_kerb = request.form['kerberos']
+        host = check_login(host_kerb)[0]
+        insert_into_connections(host, host)
+        #
         return redirect(url_for('index'))
 
 
