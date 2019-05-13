@@ -11,7 +11,7 @@ visitation_db = os.path.join(BASE_DIR, "visit.db")
 
 
 app = Flask(__name__)
-
+app.secret_key = 'blah'
 
 
 
