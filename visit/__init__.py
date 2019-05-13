@@ -14,6 +14,7 @@ app = Flask(__name__)
 
 
 
+
 def insert_into_database(fname, lname, kerberos, student_id, dorm):
     conn = sqlite3.connect(visitation_db)
     c = conn.cursor()
@@ -116,6 +117,18 @@ def update_dorm_info(kerb, dorm):
     conns = c.execute('''UPDATE students SET dorm = ? WHERE kerberos = ?; ''', (dorm, kerb))
     conn.commit()
     conn.close()
+
+
+def insert_into_attempts(student_id, student_fname, student_lname, student_kerb):
+    logged_time = datetime.now()
+    conn = sqlite3.connect(visitation_db)
+    c = conn.cursor()
+    c.execute('''INSERT into attempts(student_id, student_fname, student_lname, logged_time, student_kerb) VALUES (?, ?, ?, ?, ?);''', (student_id, student_fname, student_lname, logged_time, student_kerb))
+    conn.commit()
+    conn.close()
+
+
+
 
 
 

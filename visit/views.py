@@ -104,6 +104,8 @@ def access():
 
 
         requesting_student = fetch_user(studentID)
+
+        insert_into_attempts(studentID, requesting_student[1], requesting_student[2], student[3])
         if not requesting_student:
             return 'Not a valid student in the database'
         requesting_student_id = requesting_student[0]
@@ -127,6 +129,15 @@ def delete_guest(guest_id):
     remove_a_guest(your_id, guest_id)
 
     return redirect(url_for('dashboard'))
+
+
+
+
+@app.route('/guest-worker', methods=['GET', 'POST'])
+def guest_worker():
+
+    return render_template('guest_worker.html')
+
 
 
 
