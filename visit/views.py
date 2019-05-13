@@ -103,12 +103,13 @@ def access():
 
 
 
-        requesting_student = fetch_user(studentID)
+        requesting_student = fetch_user_by_sid(studentID)
 
-        insert_into_attempts(studentID, requesting_student[1], requesting_student[2], requesting_student[3])
         if not requesting_student:
             return 'Not a valid student in the database'
         requesting_student_id = requesting_student[0]
+        # insert_into_attempts(studentID, requesting_student[1], requesting_student[2], requesting_student[3])
+
         conns = []
         get_conns_of_user(requesting_student_id, conns)
         granted_access = False

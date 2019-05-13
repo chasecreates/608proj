@@ -56,10 +56,12 @@ def check_login(kerb):
     conn.commit()
     conn.close()
     return user
-def fetch_user(studentID):
+def fetch_user_by_sid(studentID):
     conn = sqlite3.connect(visitation_db)
     c = conn.cursor()
-    user = c.execute('''SELECT * FROM students WHERE student_id = ?''', (studentID, )).fetchone()
+    n_studentID = int(studentID)
+    user = c.execute('''SELECT * from students WHERE student_id = ?''', (n_studentID, )).fetchone()
+    print(user)
     conn.commit()
     conn.close()
     return user
