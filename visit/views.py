@@ -140,7 +140,11 @@ def guest_worker():
 
 
 
-
+@app.route('/all-attempts')
+def get_all_attempts():
+    atts = []
+    get_all_attempts(atts)
+    return str(atts)
 
 @app.route('/all')
 def get_all():

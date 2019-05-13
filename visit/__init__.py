@@ -128,6 +128,14 @@ def insert_into_attempts(student_id, student_fname, student_lname, student_kerb)
     conn.close()
 
 
+def get_all_attempts(arr):
+    conn = sqlite3.connect(visitation_db)
+    c = conn.cursor()
+    things = c.execute0('''SELECT * FROM attempts''').fetchall()
+    for row in things:
+        arr.append(row)
+    conn.commit()
+    conn.close()
 
 
 
