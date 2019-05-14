@@ -126,7 +126,7 @@ def access():
             decrypted = decrypted[:-1]
 
 
-        studentID = request.form.get('studentID')
+        studentID = decrypted
         dorm = request.form.get('dorm')
 
 
