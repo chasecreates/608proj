@@ -104,7 +104,7 @@ def access():
 
 
     if request.method == 'POST':
-        key = bytes('abcdefghijklmnop',encoding ='utf-8')
+        key = bytes('abcdefghijklmnop').encode('utf-8')
 
         cipher = AES.new(key, AES.MODE_ECB)
         # ciphertext = "MESSAGE TO DEBUG****************"
