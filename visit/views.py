@@ -1,10 +1,16 @@
 from visit import *
 from dateutil.parser import parse as parse_date
+from aes_encryption import AesEncryption
+from Crypto.Cipher import AES
+import base64
+import binascii
+
 
 
 
 @app.route('/')
 def index():
+    aes = AesEncryption()
     return render_template('index.html')
 
 @app.route('/sign-up', methods=['GET', 'POST'])
@@ -98,13 +104,34 @@ def access():
 
 
     if request.method == 'POST':
+        key = bytes('abcdefghijklmnop',encoding ='utf-8')
+
+        cipher = AES.new(key, AES.MODE_ECB)
+        # ciphertext = "MESSAGE TO DEBUG****************"
+        #Thi
+
+        ciphertext = request.form.get('studentID') #cipher.encrypt(b'Tech tutorials x')
+        # msg = bytes(ciphertext, encoding = 'utf-8') #converts mg to Byte type
+        #print(str(msg))
+
+        # print(binascii.unhexlify(mg))
+
+        decipher = AES.new(key, AES.MODE_ECB)
+        # print(binascii.hexlify(decipher.decrypt(msg)))
+
+        decrypted = decipher.decrypt(binascii.unhexlify(ciphertext)).decode("utf-8")
+
+        #Taking off padding
+        while decrypted[-1] == '?':
+            decrypted = decrypted[:-1]
+
 
         studentID = request.form.get('studentID')
         dorm = request.form.get('dorm')
 
 
 
-        requesting_student = fetch_user_by_sid(studentID)
+        requesting_student = fetch_user_by_sid(decrypted)
 
         if not requesting_student:
             return 'Not a valid student in the database'
