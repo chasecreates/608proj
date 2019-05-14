@@ -1,9 +1,10 @@
 import os
 from flask import Flask, render_template, request, session, url_for, redirect, flash, jsonify
-from datetime import datetime
+from datetime import datetime, timedelta
 from functools import wraps
 import sqlite3
 import os.path
+from Crypto.Cipher import AES
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 visitation_db = os.path.join(BASE_DIR, "visit.db")
@@ -133,11 +134,14 @@ def insert_into_attempts(student_id, student_fname, student_lname, student_kerb)
 def get_all_attempts(arr):
     conn = sqlite3.connect(visitation_db)
     c = conn.cursor()
-    things = c.execute('''SELECT * FROM attempts''').fetchall()
+    things = c.execute('''SELECT * FROM attempts ORDER BY logged_time DESC''').fetchall()
+
     for row in things:
         arr.append(row)
     conn.commit()
     conn.close()
+
+
 
 
 

@@ -9,8 +9,12 @@
          <h1 class="jumbotron-heading">Simplifying visitation at MIT dorms.</h1>
          <p class="lead text-muted">It's pretty simple. Enter your information and your guest list and you're ready to go!</p>
          <p>
+           {% if session.logged_in %}
+           You're already logged in! Go to <a href="/dashboard">dashboard.</a>
+           {% else %}
            <a href="/login" class="btn btn-primary my-2">Log me in</a>
            <a href="/sign-up" class="btn btn-secondary my-2">Sign me up</a>
+           {% endif %}
          </p>
        </div>
      </section>

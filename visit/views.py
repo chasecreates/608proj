@@ -1,4 +1,5 @@
 from visit import *
+from dateutil.parser import parse as parse_date
 
 
 
@@ -122,6 +123,7 @@ def access():
 
 
 @app.route('/delete/<guest_id>', methods=['GET', 'POST'])
+@login_required
 def delete_guest(guest_id):
     your_kerberos = session['kerberos']
     user = fetch_user_by_kerb(your_kerberos)
@@ -135,9 +137,25 @@ def delete_guest(guest_id):
 
 
 @app.route('/guest-worker', methods=['GET', 'POST'])
+@login_required
 def guest_worker():
+    atts = []
+    get_all_attempts(atts)
 
-    return render_template('guest_worker.html')
+    recent_entries = []
+    now = datetime.now()
+    for k in atts:
+        dt = parse_date(k[5])
+        print(dt)
+        if(dt <= now + timedelta(minutes=10)):
+            recent_entries.append(k)
+
+
+
+
+
+
+    return render_template('guest_worker.html', recent_entries=recent_entries)
 
 
 
@@ -158,3 +176,9 @@ def get_all_connections():
     conns = []
     lookup_connections(conns)
     return str(conns)
+
+@app.route('/logout')
+@login_required
+def logout():
+    session.clear()
+    return redirect(url_for('index'))

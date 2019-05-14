@@ -5,6 +5,9 @@
 .input-form {
   width: 50%;
 }
+.guest-container {
+  width: 50%;
+}
 </style>
 
 <br />
@@ -22,9 +25,27 @@ To edit your information, click <a href="/edit-information">here.</a>
 {% if guest_list %}
 <h1>Guest List</h1>
 
-{% for guest in guest_list %}
-<p>{{ guest.values()[0] }} <a href="/delete/{{ guest.keys()[0] }}">Remove</a></p>
-{% endfor %}
+<div class="guest-container">
+<table class="table">
+  <thead class="thead-light">
+    <tr>
+      <th scope="col">Guest Name</th>
+      <th scope="col"></th>
+
+    </tr>
+  </thead>
+  <tbody>
+    {% for guest in guest_list %}
+    <tr>
+
+      <td>{{ guest.values()[0] }}</td>
+      <td><a href="/delete/{{ guest.keys()[0] }}">Remove</a></td>
+
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+</div>
 {% endif %}
 
 </center>
