@@ -30,8 +30,8 @@ On the ESP side of the system, the only piece of data collected from an ID tap i
 
 Implementation One: Vigenere Cipher
 Our first implementation of an encryption cipher was the vigenere cipher for encrypting ID numbers on the ESP side and decrypting them on the server. The plaintext is taken in to the vignere cipher and shifted with a traditional Caeser Cipher method. However, the security upgrade comes from the nonuniform shift of the each plaintext characters; they are shifted based on the decimal representation of a predetermined key.
-
 Below is a screenshot of the ESP-side code used to encrypt using a Vigenere Cipher. The ciphertext is sent to the server and decrypted to match users with their ID in the database.
+![Screenshot of Vigenere Cipher implementation](Vignere_Cipher.jpg)
 
 Vignere Cipher Source Code (Arduino Side): Arduino code used to encrypte plaintext (student ID) before sending it up to the server.
 
