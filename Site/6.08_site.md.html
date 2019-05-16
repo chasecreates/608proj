@@ -1,0 +1,117 @@
+<meta charset="utf-8" emacsmode="-*- markdown -*-"><link rel="stylesheet" href="https://casual-effects.com/markdeep/latest/website.css?">
+
+                     **6.08 Project: Dorm Visit Automation**
+
+This is a sample style sheet for a website with a fixed menu on the left side of the screen and
+a banner at the top.
+
+
+Features
+==============================================================
+You could describe your product or project here. I'll instead
+use a paraphrased excerpt from The Charter as a placeholder:
+
+
+Team
+==============================================================
+- Chase Reid (chaser)
+- Abhishek Mohan (abhimo)
+- Habeeb Salau (salauh)
+- Mojolaoluawa Oke (mooke)
+- Winston Fee (wfee)
+
+Encryption
+==============================================================
+**Motivation**
+
+On the ESP side of the system, the only piece of data collected from an ID tap is the user’s hashed ID number. To make the project more versatile to application in a campus-wide system, we decided to encrypt the data going from the ESP to the server. We wanted to protect, the potentially sensitive information (1) of the identity of individuals visiting dorms from man-in-the-middle attacks betweent the ESP and the server.
+
+**Implementations**
+
+Implementation One: Vigenere Cipher
+Our first implementation of an encryption cipher was the vigenere cipher for encrypting ID numbers on the ESP side and decrypting them on the server. The plaintext is taken in to the vignere cipher and shifted with a traditional Caeser Cipher method. However, the security upgrade comes from the nonuniform shift of the each plaintext characters; they are shifted based on the decimal representation of a predetermined key.
+
+Below is a screenshot of the ESP-side code used to encrypt using a Vigenere Cipher. The ciphertext is sent to the server and decrypted to match users with their ID in the database.
+
+Vignere Cipher Source Code (Arduino Side): Arduino code used to encrypte plaintext (student ID) before sending it up to the server.
+
+On the serverside the ciphertext is decrypted using on the same agreed upon keyword and reversing the direction of the shift in the alphabet. This can be used to store the student’s ID in the database so that it can match with ID numbers inputted in the webform.
+
+Below is a screeenshot of the python decryption functions used in companion with the cipher Arduino code. In both the .ino and .py implementations, the keyword for encryption and decryption is decided preimplementaion.
+
+
+Vignere Cipher Source Code (Server Side): Server code used to decrypt ciphertext of student ID before storinig in the database.
+
+Drawbacks
+Although we first wanted to implement the Vignere Cipher, the encryption scheme was too basic for our implementations. With a brute force approach, the keyword could be cracked allowing potentially sensitive data to be read before going into the database.
+
+
+
+
+Implementation 2: Advanced Encryption Standard (AES)
+With the second implementation, we decided to use another symmetric key algorithm known as the Advanced Encryption Standard (AES). We implemented a 128 bit AES encryption scheme in the Electronic Codebook (ECB) method. In this method, the plaintext if first broken up into 16 byte blocks that are each decoded individually. It is a symmetric system that uses the same key for both encrypting and decrypting messages on the server and arduino sides.
+
+Once the main 16 byte key is decided, it is stored as a 16 byte (4x4) array with each byte representing a word. Next, the 16-byte key is expanded into 44 subkeys with an objective. Sets of 4 subkeys are used in each of the ten round of the encryption (four in each of 10 rounds) and four in the pre-round step. The first 16-byte block is taken from the plaintext and the XOR operation is used between each collumn in the plaintext array and the corresponding subkey.
+
+Round Operations
+In our 128-bit system a set of functions are preformed once in each of 10 rounds to encrypt the data. The original plaintext array is modified in each of these steps and is referred to as a State Array in the intermediate steps before becoming the final cipher text array
+
+In each round, the Substitution Bytes or SubBytes operation (the first step) involves breaking up each byte into its first four and last four bits. The first four bits are converted into a decimal number from 0 to 15 and the last four numbers are converted to a decimal. The two numbers give a row and collumn location in a predefined matrix. The byte is substituted by the value at this matrix position. This matrix is known as an S-box and is agreed upon beforehand with the key.
+
+The next operation is the Shift Row operation which shifts the bytes in the State Array depending on the row number; Row zero is not shifted while rows one, two, and three are shifted one, two, and three bytes respectively to the left. This creates t
+
+
+Tranformation of the (4x4) status array (A) after the Shift Row operation.
+Source: Common Lounge.com
+https://www.commonlounge.com/discussion/e32fdd267aaa4240a4464723bc74d0a5
+
+Next, the state array undergoes the mix collumn step to further encrypt the data. In this step, each collumn (4 bytes) is multiplied by the Circulant MDS Matrix to diffiuse the data. The matrix maximizes the diffusion of the data bytes multiplied in. Below the r vector represents the result and the a vector represents a collumn from the status array.
+
+
+
+*Possible location of picture or putting into Markddep
+
+Finally, in the AddRoundKey step the 4 subkeys used in the round are combined with the status matrix. Each collumn of the state array is comined with a collumn from the key using an xor operation.
+
+Padding
+The 128 bit implementation of AES require each block size to be 16 bytes long. Before encrypting the data, we padded the array with extra information to make each string length 16 characters. On the decryption side, we also had to remove these paddings from the array before using the plaintext.
+
+
+
+
+Graphic taken from TutorialsPoint.com
+https://www.tutorialspoint.com/cryptography/advanced_encryption_standard.htm
+
+
+
+
+
+Server side decryption function for AES.
+
+
+Arduino-side encryption for AES
+
+
+
+
+
+
+
+(Note 1) The MIT ID parsed from the RFID scan is a hashed version of each student’s ID; our encryption mechanisms (and project) pretend that this hashed ID is the student’s actual ID. When we refer to the student’s ID we are in fact referring to the 9-digit hashed ID.
+
+
+
+
+
+About
+==============================================================
+
+The faux-logo icon in the banner is from
+[Freepik](https://www.freepik.com)
+and licensed under [CC 3.0 BY](http://creativecommons.org/licenses/by/3.0).
+Replace `website-banner.png` in the CSS file to replace it with your own.
+
+
+
+<style class="fallback">body{visibility:hidden}</style><script>markdeepOptions={tocStyle:'long'};</script>
+<!-- Markdeep: --><script src="https://casual-effects.com/markdeep/latest/markdeep.min.js?" charset="utf-8"></script>
