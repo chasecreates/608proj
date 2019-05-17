@@ -89,6 +89,25 @@ The power strategy for the tap in system is simple. Since the device is stationa
 
 Server-Side
 ==============================================================
+**High-level**
+The server side was programmed in Flask, which a lightweight Python web library. The database is SQLite3. The Boostrap framework was used from CSS/JS capabilities and styling.
+
+The application is comprised of seven pages: home, login, sign up, dashboard, add a guest, information editing, and the guest worker flow. 
+
+The home page is where a student would land. They'd be presented with two buttons, login and sign up. Upon clicking sign up, they'd be presented with a HTML form that consists of relevant parameters. Submitting it sends a POST request that enters the parameters as a new entry row into the students database. 
+
+Upon signing up, users can then login. The login form takes a Kerberos and hashed student ID, which then performs a check on the backend to verify the entry exists and the details are corrected. After that, they're passed to the dashboard.
+
+The dashboard contains their running guest list, the ability to remove guests from the list, a link to update their dorm, and a link to add a guest. 
+
+Lastly, there's the guest worker flow which performs a GET request to an endpoint that runs a `SELECT *` query on the database's "accesses" and populates the page with the entries in descending order. 
+
+The database is comprised of three tables: students (which contains student entries and their information), connections (which represents a one-directional guest list relationship), and accesses.
+
+Student columns consist of Kerberos, hashed ID, dorm, first name and last name. Connections contains two informational columns, the first being the database ID of the user whose guest list is in question and the second being the database ID of the individual on that guest list. 
+
+Accesses contains information about the reuqesting user (namely ID, first name, last name, Kerberos) and, of course, time of entry.
+
 
 **Helper functions**
  
