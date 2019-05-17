@@ -20,12 +20,25 @@ Team
 - Mojolaoluawa Oke (mooke)
 - Winston Fee (wfee)
 
-Arduino Side
+
+Hardware
 ==============================================================
-**Overview**
+![](esp.jpg)
 
-The goal of our hardware system involves having the capability to read an ID, send that ID to a database to check if the student is valid, then returning some visual/audio recognition to show if the tap was valid. To accomplish this, we used an RFID reader compatible with MIT IDs, the ESP-32 to post to a server, and some LEDs combined with a buzzer to give recognition.
+**Functional Block Diagram**
 
+![](funcitonal_block_diagram.png)
+
+The MFRC522 RFID reader detects and reads an ID card within its range, sending the information to the ESP32, which parses and encrypts data from the card. The ESP32 then sends that data to the server, which returns a response determining whether the student has access to the dorm. The piezo buzzer and LEDs provide sensory feedback about access to the dorm. The ESP32 is conencted to a battery board that is powered by a battery. We envision our system being used by charging the battery with power from a wall socket consistently while the battery powers the system.
+
+**Extra Parts**
+- MFRC522: RFID reader used to read the data from the MIT ID cards.
+- Piezo buzzer: Used to provide auditory feedback to both student and security worker.
+- Red LED: Used to indicate to the student that he/she cannot enter the dorm.
+- Green LED: Used to indicate to the student that he/she can enter the dorm.
+
+Arduino-Side Software
+==============================================================
 **System Functionality**
 ![](state_machine_diagram.png)
 
@@ -143,26 +156,9 @@ On the arduino side, we used the same symmetric key to encrypt the data before s
 Arduino-side encryption for AES
 ![Arduino Side Encryption for AES Function](AES_Arduino.jpg)
 
-Server-Side
-==============================================================
-**High-level**
-The server side was programmed in Flask, which a lightweight Python web library. The database is SQLite3. The Boostrap framework was used from CSS/JS capabilities and styling.
 
-The application is comprised of seven pages: home, login, sign up, dashboard, add a guest, information editing, and the guest worker flow. 
 
-The home page is where a student would land. They'd be presented with two buttons, login and sign up. Upon clicking sign up, they'd be presented with a HTML form that consists of relevant parameters. Submitting it sends a POST request that enters the parameters as a new entry row into the students database. 
 
-Upon signing up, users can then login. The login form takes a Kerberos and hashed student ID, which then performs a check on the backend to verify the entry exists and the details are corrected. After that, they're passed to the dashboard.
-
-The dashboard contains their running guest list, the ability to remove guests from the list, a link to update their dorm, and a link to add a guest. 
-
-Lastly, there's the guest worker flow which performs a GET request to an endpoint that runs a `SELECT *` query on the database's "accesses" and populates the page with the entries in descending order. 
-
-The database is comprised of three tables: students (which contains student entries and their information), connections (which represents a one-directional guest list relationship), and accesses.
-
-Student columns consist of Kerberos, hashed ID, dorm, first name and last name. Connections contains two informational columns, the first being the database ID of the user whose guest list is in question and the second being the database ID of the individual on that guest list. 
-
-Accesses contains information about the reuqesting user (namely ID, first name, last name, Kerberos) and, of course, time of entry.
 
 
 
