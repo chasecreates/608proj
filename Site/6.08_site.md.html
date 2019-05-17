@@ -87,6 +87,61 @@ sendID():
 The power strategy for the tap in system is simple. Since the device is stationary, the device can simply be plugged into a wall outlet. The wall outlet is plugged into the charging port of the battery board, and the battery board is plugged into the ESP. This way, the ESP is constantly running, but if the power in the outlet goes down, the battery pack is directly and automatically used to power the ESP system. In testing, it was found that the tap in system could run on strictly battery power for 7 hours (with a card-tap rate of approximately 5 taps per hour). The RFID reader draws about 30mA while running but has a sleep current of near 0. It is possible then that the 7-hour timeframe could be improved by implementing an improved sleep mechanism for the RFID reader, so that it doesn’t draw 30mA constantly. However, since the system is constantly plugged into a power outlet, there should be no significant issues with the reader drawing too much power, even if it is constantly running at 30mA.
 
 
+Server-Side
+==============================================================
+
+**Functions**
+ 
+`def insert_into_database(fname, lname, kerberos, student_id, dorm):` 
+This function inserts a new student into the database. 
+
+`def insert_into_connections(student1, student2):`
+This function gneerates a new guest list collection whereby student 2 has been added to student 1's guest list. The two arguments are the database IDs of each party.
+
+`def lookup_database(arr):`
+Returns all students in the database.
+
+`def lookup_connections(arr):`
+Returns all connections in the database.
+
+`def check_login(kerb):`
+Verifies the Kerberos entered upon login is even valid in the database.
+
+`def fetch_user_by_sid(studentID):`
+Fetches a student's entire entry by performing a search on the students table with their hashed ID as the search parameter. 
+
+
+`def fetch_user_by_kerb(kerb):`
+Fetches a student's entire entry by performing a search on the students table with their Kerberos as the search parameter. 
+
+
+`def fetch_user_by_id(id):`
+Fetches a student's entire entry by performing a search on the students table with their database ID as the search parameter. 
+
+
+`def get_conns_of_user(id, conn_list):`
+First argument is the database of the ID of the user for whom we'd like to retrieve every individual on their guest list. Second argument is an empty list that will be iteratively filled with the entire entry of each student on the guest list. Performs a search of the connections table with the hosting student ID as the parameter then iterates through the collection by creating a dictionary object for each student and appending it to the `conns_list` list variable.
+
+
+`def get_guests_of_user(kerberos, guest_list):`
+Performs the same operation as above, but with the Kerberos of the user as the parameter, rather than their database ID.
+
+`def remove_a_guest(your_id, guest_id):`
+Removes a guest by removing from the collection's table the entry with `student1 = your_id` and `student2 = guest_id`
+  
+
+
+`def update_dorm_info(kerb, dorm):`
+Retrieves your entire student entry and replaces the dorm column with an updated dorm name. 
+
+
+
+
+`def get_all_attempts(arr):`
+Retrieves every successful dorm access/entry attempt in descending order for the guest worker.
+
+
+
 Encryption
 ==============================================================
 **Motivation**
