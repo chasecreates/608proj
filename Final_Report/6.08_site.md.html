@@ -276,8 +276,7 @@ The 128 bit implementation of AES require each block size to be 16 bytes long. B
 **Coded Examples**
 
 On the server side, we used a function with the symmetric key and ciphertext as parameters. We imported the Crypto.Cipher module and used the mbedtls module and AES library which completes the AES (ECB) encryption.
-Server side decryption function for AES. At the end of the code we remove the padding characters (the question mark signs) to undo the padding on the encryption side.
-
+Server side decryption function for AES.
 ![Serverside Decryption for AES Function.](AES_Server.JPG)
 
 On the arduino side, we used the same symmetric key to encrypt the data before sending it. We utilized AES lib
