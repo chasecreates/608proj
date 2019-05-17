@@ -23,6 +23,12 @@ Team
 Arduino Side
 ==============================================================
 **System Functionality**
+![](state_machine_diagram.png)
+
+- When the system is idle, it waits for the RFID reader to detect an ID card within its range.
+- When a new card is detected, the system will read the UID (unique ID number) from the raw data in the card, and it will encrypt it using AES encryption.
+- Once encrypted, it will send a POST request to the server to determine if the UID of the card has access to the dorm.
+- If "True" is returned, the buzzer buzzes for 400 milliseconds and the green LED lights, and, if "False" is returned, the buzzer buzzes for 1500 milliseconds and the red LED blinks. Then, the sytem returns to its idle state.
 
 
 
