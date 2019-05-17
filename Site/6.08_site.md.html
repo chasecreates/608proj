@@ -29,7 +29,11 @@ Hardware
 
 ![](funcitonal_block_diagram.png)
 
-The MFRC522 RFID reader detects and reads an ID card within its range, sending the information to the ESP32, which parses and encrypts data from the card. The ESP32 then sends that data to the server, which returns a response determining whether the student has access to the dorm. The piezo buzzer and LEDs provide sensory feedback about access to the dorm. The ESP32 is conencted to a battery board that is powered by a battery. We envision our system being used by charging the battery with power from a wall socket consistently while the battery powers the system.
+The MFRC522 RFID reader detects and reads an ID card within its range, sending the information to the ESP32, which parses and encrypts data from the card. The ESP32 then sends that data to the server, which returns a response determining whether the student has access to the dorm. The piezo buzzer and LEDs provide sensory feedback about access to the dorm. 
+
+**Power**
+
+The power strategy for the tap in system is simple. Since the device is stationary, the device can simply be plugged into a wall outlet. The wall outlet is plugged into the charging port of the battery board, and the battery board is plugged into the ESP. This way, the ESP is constantly running, but if the power in the outlet goes down, the battery pack is directly and automatically used to power the ESP system. In testing, it was found that the tap in system could run on strictly battery power for 7 hours (with a card-tap rate of approximately 5 taps per hour). The RFID reader draws about 30mA while running but has a sleep current of near 0. It is possible then that the 7-hour timeframe could be improved by implementing an improved sleep mechanism for the RFID reader, so that it doesn’t draw 30mA constantly. However, since the system is constantly plugged into a power outlet, there should be no significant issues with the reader drawing too much power, even if it is constantly running at 30mA.
 
 **Extra Parts**
 - MFRC522: RFID reader used to read the data from the MIT ID cards.
@@ -80,11 +84,6 @@ sendID():
 ![](ESPcode8.png)
 ![](ESPcode9.png)
 
-
-
-**Power**
-
-The power strategy for the tap in system is simple. Since the device is stationary, the device can simply be plugged into a wall outlet. The wall outlet is plugged into the charging port of the battery board, and the battery board is plugged into the ESP. This way, the ESP is constantly running, but if the power in the outlet goes down, the battery pack is directly and automatically used to power the ESP system. In testing, it was found that the tap in system could run on strictly battery power for 7 hours (with a card-tap rate of approximately 5 taps per hour). The RFID reader draws about 30mA while running but has a sleep current of near 0. It is possible then that the 7-hour timeframe could be improved by implementing an improved sleep mechanism for the RFID reader, so that it doesn’t draw 30mA constantly. However, since the system is constantly plugged into a power outlet, there should be no significant issues with the reader drawing too much power, even if it is constantly running at 30mA.
 
 
 Encryption
