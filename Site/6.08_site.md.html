@@ -37,6 +37,12 @@ The MFRC522 RFID reader detects and reads an ID card within its range, sending t
 - Red LED: Used to indicate to the student that he/she cannot enter the dorm.
 - Green LED: Used to indicate to the student that he/she can enter the dorm.
 
+**Power**
+
+The power strategy for the tap in system is simple. Since the device is stationary, the device can simply be plugged into a wall outlet. The wall outlet is plugged into the charging port of the battery board, and the battery board is plugged into the ESP. This way, the ESP is constantly running, but if the power in the outlet goes down, the battery pack is directly and automatically used to power the ESP system. In testing, it was found that the tap in system could run on strictly battery power for 7 hours (with a card-tap rate of approximately 5 taps per hour). The RFID reader draws about 30mA while running but has a sleep current of near 0. It is possible then that the 7-hour timeframe could be improved by implementing an improved sleep mechanism for the RFID reader, so that it doesn’t draw 30mA constantly. However, since the system is constantly plugged into a power outlet, there should be no significant issues with the reader drawing too much power, even if it is constantly running at 30mA.
+
+
+
 Arduino-Side
 ==============================================================
 **System Functionality**
@@ -80,11 +86,6 @@ sendID():
 ![](ESPcode8.png)
 ![](ESPcode9.png)
 
-
-
-**Power**
-
-The power strategy for the tap in system is simple. Since the device is stationary, the device can simply be plugged into a wall outlet. The wall outlet is plugged into the charging port of the battery board, and the battery board is plugged into the ESP. This way, the ESP is constantly running, but if the power in the outlet goes down, the battery pack is directly and automatically used to power the ESP system. In testing, it was found that the tap in system could run on strictly battery power for 7 hours (with a card-tap rate of approximately 5 taps per hour). The RFID reader draws about 30mA while running but has a sleep current of near 0. It is possible then that the 7-hour timeframe could be improved by implementing an improved sleep mechanism for the RFID reader, so that it doesn’t draw 30mA constantly. However, since the system is constantly plugged into a power outlet, there should be no significant issues with the reader drawing too much power, even if it is constantly running at 30mA.
 
 
 Server-Side
@@ -281,7 +282,14 @@ Arduino-side encryption for AES
 
 
 
+Design Challenges and Decision-Making
+==============================================================
 
+Because the MIT ID cards function at a specific frequency, we used the MFRC522 RFID reader as it functioned at the 13.56MHz frequency that the ID cards functioned on. Since the raw data in the ID card had the hashed version of student’s ID numbers and we could not gain access to the hashing function for security reasons, we designed our system to use the hashed number as the student’s actual ID number. And, since our system sends the hashed ID number from the ESP32 to the server, to enhance security, we used AES (Advanced Encryption Standard) encryption to encrypt the number being sent over the network. Using AES encryption was very challenging to implement, particularly encrypting C++ on the ESP32 while being able to decrypt in Python on the server, but it was well worth the efforts as it is ore secure than likes of the Vigenere Cipher. Our implementation of the encryption is discussed in more detail in that section.
+
+Since we wanted our system to mimic the complete tap-in experience, which includes dorm residents tapping their IDs to gain access to their own dorms, we allowed users to be on their own guest lists to create the experience of them having access to their own dorms. We wanted both students and security workers to receive feedback after a student tapped their IDs, so we set up two interfaces of feedback. The first one, on the student side, is compromised of a buzzer, which buzzes longer when access is denied, and green and red LEDs, which blink when the student can and cannot, respectively, enter the dorm.  The second interface, on the security worker’s side, is a website since they already have monitors at their desk. The website displays the name, ID number, and kerberos of the student that entered the dorm, allowing the workers to know who’s entering the dorm.
+
+As the system is intended to be functional 24/7 and will by the front desk of dorms, the system will be powered by a [insert type] battery, which will be consistently charged through a wall socket. This way, it is powered throughout the day, but can still function in case of power cuts. Our power management and findings are touched upon more in that section.
 
 
 
