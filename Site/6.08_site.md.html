@@ -21,6 +21,46 @@ Team
 - Mojolaoluawa Oke (mooke)
 - Winston Fee (wfee)
 
+Arduino Side
+==============================================================
+**Code Explanation**
+
+setup():
+
+- Sets up RFID reader, PWM channels (red LED, green LED, buzzer), and connects to the Wifi.
+
+![](ESPcode1.png)
+![](ESPcode2.png)
+![](ESPcode3.png)
+![](ESPcode4endsetup.png)
+
+loop():
+
+- The code loops and continuously checks if a new RFID card has been scanned
+- If a new card has been scanned, the returned bytes are converted into an integer ID
+- Question marks are then appended onto the end of the ID until the ID is 16 characters long. This is to pad for the encryption, which requires inputs to be a multiple of 16
+- The length 16 padded ID is then encrypted and stored in hexadecimal format
+- The function sendID() is then called
+
+![](ESPcode5.png)
+![](ESPcode6.png)
+![](ESPcode7endloop.png)
+
+sendID():
+- The ID stored in the UIDstr variable (which will be the hex encrypted ID at this point) and the Dorm are added to the POST body
+- The request is then sent to the server
+- The server will either return True (which triggers a small beep and the green LED), or something else (which triggers a long beep and the red LED)
+
+![](ESPcode8.png)
+![](ESPcode9.png)
+
+
+
+**Power**
+
+The power strategy for the tap in system is simple. Since the device is stationary, the device can simply be plugged into a wall outlet. The wall outlet is plugged into the charging port of the battery board, and the battery board is plugged into the ESP. This way, the ESP is constantly running, but if the power in the outlet goes down, the battery pack is directly and automatically used to power the ESP system. In testing, it was found that the tap in system could run on strictly battery power for 7 hours (with a card-tap rate of approximately 5 taps per hour). The RFID reader draws about 30mA while running but has a sleep current of near 0. It is possible then that the 7-hour timeframe could be improved by implementing an improved sleep mechanism for the RFID reader, so that it doesn’t draw 30mA constantly. However, since the system is constantly plugged into a power outlet, there should be no significant issues with the reader drawing too much power, even if it is constantly running at 30mA.
+
+
 Encryption
 ==============================================================
 **Motivation**
